@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-oraclejdk8-temporary
+FROM carsharing/alpine-oraclejdk8-bash
 VOLUME /tmp
 ADD eureka-1.0.jar app.jar
 #RUN bash -c 'touch /app.jar'
