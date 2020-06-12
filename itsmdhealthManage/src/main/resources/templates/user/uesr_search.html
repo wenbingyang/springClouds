@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+    <title>搜索</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{css/bootstrap.min.new.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-guojiao.css}"/>
+    <link rel="stylesheet" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-datetimepicker.min.css}"/>
+
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+
+    <script th:src="@{/js/jquery.form.js}"></script>
+    <!-- popper.min.js 用于弹窗、提示、下拉菜单 -->
+    <script th:src="@{/js/popper.min.js}"></script>
+
+    <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery.singlePageNav.min.js}"></script>
+
+    <script th:src="@{/js/wow.min.js}"></script>
+    <script th:src="@{/js/bootstrapValidator.min.js}"></script>
+    <script th:src="@{/js/moment-with-locales.js}"></script>
+    <script th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+<!--    <script src="https://cdn.bootcss.com/moment.js/2.22.0/moment-with-locales.js"></script>-->
+<!--    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>-->
+
+</head>
+<body>
+
+<!--导航-->
+<nav class="navbar navbar-default">
+    <div class="container">
+        <!--小屏幕导航按钮和logo-->
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#" class="navbar-brand">复工人员监控</a>
+        </div>
+        <!--小屏幕导航按钮和logo-->
+        <!--导航-->
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a th:href="@{toLogin}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;首页</a></li>
+                <li><a onclick="fgRecord()"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;复工记录</a></li>
+            </ul>
+        </div>
+        <!--导航-->
+
+    </div>
+</nav>
+
+<section id="contact">
+    <div class=="lvjing">
+        <div class=="container">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="list-group">
+                        <a onclick="fgRecord()" class="list-group-item" id="fglb1">复工疫情列表</a>
+                        <a onclick="searchRecord()" class="list-group-item active" id="fgcx1">复工疫情搜索</a>
+<!--                        <a href="" role="button" class="list-group-item" data-toggle="modal"-->
+<!--                           data-target="#myModal">疫情自报</a>-->
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="page-header">
+                        <h1 style="display:inline-block;font-weight:bold;color:blue">疫情复工搜索</h1>
+                    </div>
+                    <ul class="nav nav-tabs">
+                        <li id="fglb">
+                            <a  onclick="fgRecord()">复工疫情列表</a>
+                        </li>
+                        <li class="active" id="fgcx">
+                            <a onclick="searchRecord()">复工疫情搜索</a>
+                        </li>
+<!--                        <li>-->
+<!--                            <a href="" role="button" data-toggle="modal" data-target="#myModal">添加用户</a>-->
+<!--                        </li>-->
+                    </ul>
+                    <form class="form-horizontal" id="healthSh" role="form">
+                        <div class="col-md-8 alert alert-info " role="alert">
+                            <strong>技巧提示：</strong>
+                            支持模糊搜索和匹配搜索！
+                        </div>
+                        <div class="col-md-8" id="nameSh">
+                            <label for="nameNew">姓名</label>
+                            <input type="text" name="nameNew" id="nameNew" class="form-control" placeholder="请输入用户名">
+                        </div>
+                        <div class="col-md-8">
+                            <label for="djStartTimes">上报开始时间</label>
+                            <div class='input-group date' id='djStartTimeSh'>
+                                <input type="text" name="djStartTimes" id="djStartTimes" class="form-control">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+				    	        </span>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="djEndTimes">上报结束时间</label>
+                            <div class='input-group date'  id='djEndTimeSh'>
+                                <input type="text" name="djEndTimes" id="djEndTimes" class="form-control">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+				    	        </span>
+                            </div>
+                        </div>
+                        <div class="col-md-8" id="branchSh">
+                            <label for="branchs">所属部门</label>
+                            <div class="">
+                                <select name="branchs" id="branchs" class="form-control">
+                                    <option th:value="-1">请选择部门</option>
+                                    <!--                    <option  th:each="list:${session.jsDepartment}" th:value="${list.children_code}" th:text="${list.children_name }"></option>-->
+                                    <option  th:each="list:${jsDepartment}" th:value="${list.children_code}" th:text="${list.children_name }"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+<!--                                <button name="submitSearch" class="btn btn-default" onclick="fgRecord()">提交</button>-->
+                            <input name="submitSearch" value="提交" class="btn btn-info" onclick="fgRecord()"/>
+                        </div>
+
+                    </form>
+<!--                    分页查询列表-->
+                    <table class="table userListTable" id="myTable">
+                        <thead>
+                        <tr>
+                            <th>上报日期</th>
+                            <th>人员姓名</th>
+                            <th>身份证号</th>
+                            <th>部门</th>
+                            <th>当前是否有不适症状</th>
+                            <th>最近一次返回工作地日期</th>
+                            <th>上午体温</th>
+                            <th>下午体温</th>
+                            <th>14天内是否途径或来自疫区</th>
+                            <th>14天内有无接触相关人员</th>
+                            <th>岗位状态</th>
+                            <th>上班交通方式</th>
+                            <th>操作</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+<!--                        <tr th:each="user : ${users}">-->
+<!--                            <th scope="row" th:text="${user.id}">1</th>-->
+<!--                            <td th:text="${user.name}">pancm</td>-->
+<!--                            <td th:text="${user.password}">123456</td>-->
+<!--                            <td th:text="${user.age}">16</td>-->
+<!--                            <td><a th:href="@{/toEdit(id=${user.id})}">编辑</a></td>-->
+<!--                            <td><a th:href="@{/toDelete(id=${user.id})}">删除</a></td>-->
+<!--                        </tr>-->
+                        </tbody>
+                    </table>
+                    <!--分页栏-->
+                    <div id="pagination">
+
+                    </div>
+<!--                    分页查询列表-->
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+
+
+
+
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">查看</h4>
+            </div>
+            <div class="modal-body">
+<!--                    绝对不要加readonly-->
+                        <input type="hidden" id="name"   th:value="${userObj.name}">
+                        <input type="hidden" id="nameNew2" th:value="${userObj.name}">
+                        <input type="hidden" id="sfzh"  th:value="${userObj.sfzh}">
+                        <input type="hidden" id="branchName"  th:value="${userObj.branchName}">
+                        <!--                            根据是否是领导，是显示部门，姓名，日期-->
+                        <input type="hidden" id="branch_id"  th:value="${userObj.branchId}">
+                    <!--                    绝对不要加readonly-->
+                        <input type="hidden" id="branch_id2"  th:value="${userObj.branchId}">
+                        <input type="hidden" id="mobile" th:value='${userObj.mobile}'>
+                        <!--                            根据是否部长显示姓名日期，非部长，也不是领导只显示日期-->
+                        <input type="hidden" id="isBz" th:value='${userObj.isBz}'>
+    
+                <form class="form-horizontal" id="recordTemp" role="form">
+<!--                        <div class="form-group">-->
+<!--                            <label for="name">上报人</label>-->
+<!--                            &lt;!&ndash;value需要设计session保持用户名的方式传递到该页面&ndash;&gt;-->
+<!--                            <input type="text" id="name" class="form-control" readonly="readonly" th:value="">-->
+<!--                        </div>-->
+<!--                        <div class="form-group">-->
+<!--                            <label for="sfzh">身份证号</label>-->
+<!--                            <input type="text" id="sfzh" class="form-control" readonly="readonly" th:value="">-->
+<!--                        </div>-->
+<!--                        <div class="form-group">-->
+<!--                            <label for="branchName">部门</label>-->
+<!--                            <input type="text" id="branchName" class="form-control" readonly="readonly" th:value="">-->
+<!--                        </div>-->
+<!--                        <div class="form-group" style="display: none">-->
+<!--                            <label for="branch_id">部门ID</label>-->
+<!--                            <input type="text" id="branch_id" class="form-control" readonly="readonly" th:value="">-->
+<!--                        </div>-->
+                        <div class="form-group">
+                            <label for="addtime">上报日期</label>
+                            <input type="text" id="addtime" class="form-control" readonly="readonly" th:value="${#dates.format(new java.util.Date().getTime(), 'YYYY/MM/dd')}">
+                        </div>
+                    <div class="form-group">
+                        <label for="symptom">当前是否有腹泻、乏力、发热、咳嗽等不适症状</label>
+                        <select  name="symptom" id="symptom"  class="form-control">
+                            <option th:value="-1">请选择</option>
+                            <option th:value="1">否</option>
+                            <option th:value="0">是</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="retTime">最近一次返回工作地日期</label>
+                        <div class='input-group date' style="width: 14em;" id='return_time'>
+                            <input type="text" name="retTime" id="retTime" class="form-control">
+					            <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+				    	        </span>
+                        </div>
+                        <!--<input type="email" id="addtime" class="form-control" placeholder="请输入用户邮箱">-->
+                    </div>
+                    <div class="form-group">
+                        <label for="sfjcyqry">14天内有无接触相关人员</label>
+                        <select  name="sfjcyqry" id="sfjcyqry" class="form-control">
+                            <option th:value="-1">请选择</option>
+                            <option th:value="0">无</option>
+                            <option th:value="1">疫情重点地区人员（含湖北、浙江、广东、河南、安徽、湖南六省）</option>
+                            <option th:value="2">新冠肺炎疑似病人</option>
+                            <option th:value="3">新冠肺炎确诊病人</option>
+                            <option th:value="4">其他（需填写说明）</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="sympt_instruc1">
+                        <label for="sympt_instruc">其他说明</label>
+                        <input type="text" id="sympt_instruc" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="sftjyq">14天内是否途径或来自疫区</label>
+                        <select  name="sftjyq" id="sftjyq" class="form-control">
+                            <option th:value="-1">请选择</option>
+                            <option th:value="1">否</option>
+                            <option th:value="0">是</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="distance_instruc1">
+                        <label for="distance_instruc">明确途径城市、交通、日期</label>
+                        <input type="text" id="distance_instruc" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="gw_status">岗位状态</label>
+                        <select name="gw_status" id="gw_status" class="form-control">
+                            <option th:value="-1">请选择</option>
+                            <option th:value="0">线下到岗</option>
+                            <option th:value="1">线上到岗</option>
+                            <option th:value="2">居家隔离</option>
+                            <option th:value="3">正接受医学观察</option>
+                            <option th:value="4">已被确诊感染病例</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sfxqyq">小区14日内是否出现疫情</label>
+                        <select  name="sfxqyq" id="sfxqyq" class="form-control">
+                            <option th:value="-1">请选择</option>
+                            <option th:value="1">否</option>
+                            <option th:value="0">是</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="traffic_way">上班交通方式</label>
+                        <select  name="traffic_way" id="traffic_way" class="form-control">
+                            <option th:value="-1">请选择</option>
+                            <option th:value="0">自驾</option>
+                            <option th:value="1">电动车</option>
+                            <option th:value="2">步行</option>
+                            <option th:value="3">公司班车</option>
+                            <option th:value="4">爱心拼车</option>
+                            <option th:value="5">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="trafficelse_way1">
+                        <label for="trafficelse_way">其他上班交通方式</label>
+                        <input type="text" id="trafficelse_way" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="monintemp">上午体温</label>
+                        <input type="text" name="monintemp" id="monintemp" class="form-control">
+                    </div>
+                    <div class="form-group" id="aftertempdiv">
+                        <label for="aftertemp">下午体温</label>
+                        <input type="text"  name="aftertemp" id="aftertemp" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="sympt_res">14日内身体不适情况</label>
+                        <input type="text" id="sympt_res" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="yjxxdg">预计次日是否线下到岗</label>
+                        <select name="yjxxdg"  id="yjxxdg" class="form-control">
+                            <option th:value="-1">请选择</option>
+                            <option th:value="1">否</option>
+                            <option th:value="0">是</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+<!--                <input type="submit" name="submitRecord" value="提交" class="btn btn-info" onclick="record()"/>-->
+
+                <!--<button type="button" name="submitRecord" class="btn btn-primary"  onclick="record()">提交</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" th:inline="javascript">
+    //$('#myModal').on('shown.bs.modal', function () {
+    //$('#myInput').focus()
+    //})
+    $(function () {
+        $("#fglb").removeClass("active");
+        $("#fglb1").removeClass("active");
+        $("#myTable").removeClass("active");
+        $("#pagination").removeClass("active");
+        $("#myTable").css("display","none");
+        $("#pagination").css("display","none");
+
+        $("#healthSh").addClass("active");
+        $("#healthSh").css("display","block");
+        $("#fgcx").addClass("active");
+        $("#fgcx1").addClass("active");
+        $('#djStartTimeSh').datetimepicker({
+
+            // format: 'YYYY-MM-DD hh:mm',
+            format: 'YYYY/MM/DD',
+
+            locale: moment.locale('zh-cn'),
+            defaultDate: "2020/01/01"
+
+        });
+
+        $('#djEndTimeSh').datetimepicker({
+
+            // format: 'YYYY-MM-DD hh:mm',
+            format: 'YYYY/MM/DD',
+
+            locale: moment.locale('zh-cn'),
+            defaultDate: "2020/01/01"
+
+        });
+        //根据是否是领导，是显示部门，姓名，日期
+        var branchId = $('#branch_id').val();
+        var isBz = $('#isBz').val();
+        if(branchId == 35){ //领导
+            $("#nameSh").css("display","block");
+            $("#djStartTimes").css("display","block");
+            $("#djEndTimes").css("display","block");
+            $("#branchSh").css("display","block");
+        }else if(branchId != 35 && isBz == 0){ //非领导 非部长
+            $("#nameSh").css("display","none");
+            $("#djStartTimes").css("display","block");
+            $("#djEndTimes").css("display","block");
+            $("#branchSh").css("display","none");
+        }else if (isBz == 1 && branchId != 35){ //非领导 是部长
+            $("#nameSh").css("display","block");
+            $("#djStartTimes").css("display","block");
+            $("#djEndTimes").css("display","block");
+            $("#branchSh").css("display","none");
+        }
+
+        $('#healthSh').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                nameNew : {
+                    validators: {
+                        // notEmpty: {
+                        //     message: '姓名值不能为空！'
+                        // },
+                        stringLength: {
+                            min: 2,
+                            message: '姓名长度必须大于2！'
+                        },
+                        regexp: {
+                            regexp: /^[\u4e00-\u9fa5]+$/,
+                            message: '姓名不能有数字！'
+                        }
+
+
+                    }
+                },
+                djStartTimes: {
+                    validators: {
+                        notEmpty: {
+                            message: '上报开始时间不能为空'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '上报开始时间无效'
+                        }
+                    }
+                },
+                djEndTimes: {
+                    validators: {
+                        notEmpty: {
+                            message: '上报结束时间不能为空'
+                        },
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: '上报结束时间无效'
+                        }
+                    }
+                },
+                sftjyq: {
+                    validators: {
+                        notEmpty: {
+                            message: '14天内是否途径或来自疫区不能为空'
+                        },
+                        greaterThan: {
+                            value: 0,
+                            message: '请选择14天内是否途径或来自疫区'
+                        }
+                    }
+
+
+                },
+                branchs: {
+                    validators: {
+                        greaterThan: {
+                            value: 0,
+                            message : '请选择部门'
+                        }
+                    }
+                }
+
+
+            }
+        });
+
+
+
+		//
+		//         getUserList(currentPage,avageNum);
+        //         initPagination(totalNum,totalPage);
+				
+		
+   
+
+       
+
+
+        $(".table tbody tr td").click(function(e){     //function_td
+            $(this).css("font-weight","bold");
+            // $(this).css("max-width","58px");
+            $(this).css("max-height","58px");
+            $(this).css("white-space","pre-wrap");
+            e.stopPropagation();
+        });
+
+    });
+
+
+
+    //注意：若将代码写到$(function(){})中，则里面的所有方法都不是全局的，故此a标签中的onclick调用不到里面的方法！！！。
+    //总记录数
+    var totalNum = 0;
+
+    //总页数
+    var totalPage = 0;
+
+    //默认每页显示数
+    var avageNum = 20;
+
+    //默认显示第一页
+    var currentPage = 1;
+
+
+
+
+    //与后台交互获取数据，异步加载到页面上,可以用搜索页面用
+    function getUserList(pageNum,pageSize){
+
+        // var name = $('#name').val();//登录的人的姓名
+        var sfzh = $('#sfzh').val();
+        var mobile = $('#mobile').val();
+        var branchName = $('#branchName').val();
+        var nameNew = $('#nameNew').val();//查询的人的姓名
+        var djStartTime = $('#djStartTimes').val();
+        var djEndTime = $('#djEndTimes').val();
+        var branchId = $('#branchs').val();//查询人的部门
+        // if (nameNew != ""){
+        //     name = nameNew;
+        // }
+        // if (nameNew == "" ){
+        //     nameNew = $("#nameNew2").val();
+        // }
+        var branchIdLd=$('#branch_id').val();//登录的人部门
+
+        // if( branchId == -1 ){
+        //     branchId=branchIdLd;
+        //     $("#branch_id2").val(branchIdLd);
+        // }else if(branchId!="" && branchId!=-1){
+        //    $("#branch_id2").val(branchId);
+        // }
+        var branch_id2=$('#branch_id2').val();//查询的人部门
+       //  if (branch_id2!="" && branch_id2!=-1){
+       //     branchId=branch_id2;
+       // }
+        currentPage = pageNum;
+
+        var data = {
+            "name": nameNew,
+            "sfzh": sfzh,
+            "mobile": mobile,
+            "branchId": branch_id2,
+            "branchName": branchName,
+            "djStartTime":djStartTime,
+            "djEndTime":djEndTime,
+            "pageNum": pageNum,
+            "pageSize": pageSize
+        };
+
+        // var data = {
+        //     "name": "",
+        //     "sfzh": "320125199004091734",
+        //     "mobile": "15312990896",
+        //     "branchId": "20",
+        //     "branchName": "贸易管理部",
+        //     "djStartTime":"2020/01/01",
+        //     "djEndTime":"2020/05/11",
+        //     "pageNum": pageNum,
+        //     "pageSize": pageSize
+        // };
+
+        var sdata = JSON.stringify(data);
+
+        $("table tbody").html(" ");
+        $.ajax({
+            type: "POST",
+            dataType: "json",//通过POST方式上传请求
+            contentType: "application/json",//上传内容格式为json结构
+            data: sdata,                                 //上传的参数
+            async: true,   //必须是true,false无法location.href跳转到其他页面
+            url: "searchHealthReportByPageAndtime",     //请求的url。与后端@Request Mapping注解中的值一致。
+            success:function(mdata){
+                if (mdata.result.data.list.list.length>0){
+                    var length = mdata.result.data.list.list.length;
+                    totalNum = mdata.result.data.list.total;
+                    totalPage = mdata.result.data.list.pages;
+                  //  alert("共有"+totalNum+"条记录"+totalPage+"页");
+                    for(var  i = 0;i<length;i++){
+                        var addtime = mdata.result.data.list.list[i].addtime;
+                        var name = mdata.result.data.list.list[i].name;
+                        var sfzh = mdata.result.data.list.list[i].sfzh;
+                        var branchName = mdata.result.data.list.list[i].branchName;
+                        var branchId = mdata.result.data.list.list[i].branchId;
+                        var zsymptom = mdata.result.data.list.list[i].zsymptom;
+                        var symptom = mdata.result.data.list.list[i].symptom;
+                        var retTime = mdata.result.data.list.list[i].retTime;
+                        var monintemp = mdata.result.data.list.list[i].monintemp;
+                        var aftertemp = mdata.result.data.list.list[i].aftertemp;
+                        var zsftjyq = mdata.result.data.list.list[i].zsftjyq;
+                        var sftjyq = mdata.result.data.list.list[i].sftjyq;
+                        var zsfjcyqry = mdata.result.data.list.list[i].zsfjcyqry;
+                        var sfjcyqry = mdata.result.data.list.list[i].sfjcyqry;
+                        // var zsfxqyq = mdata.result.data.list.list[i].zsfxqyq;
+                        var sfxqyq = mdata.result.data.list.list[i].sfxqyq;
+                        var zgw_status = mdata.result.data.list.list[i].zgw_status;
+                        var gw_status = mdata.result.data.list.list[i].gw_status;
+                        var ztraffic_way = mdata.result.data.list.list[i].ztraffic_way;
+                        var traffic_way = mdata.result.data.list.list[i].traffic_way;
+                        var mobile = mdata.result.data.list.list[i].mobile;
+                        var yjxxdg = mdata.result.data.list.list[i].yjxxdg;
+
+                        $(".userListTable tbody").append(
+                            '<tr>'+
+                            '<td>'+addtime+'</td>'+
+                            '<td>'+name+'</td>'+
+                            '<td>'+sfzh+'</td>'+
+                            '<td>'+branchName+'</td>'+
+                            '<td style="display:none">'+branchId+'</td>'+
+                            '<td>'+zsymptom+'</td>'+
+                            '<td style="display:none">'+symptom+'</td>'+
+                            '<td>'+retTime+'</td>'+
+                            '<td>'+monintemp+'</td>'+
+                            '<td>'+aftertemp+'</td>'+
+                            '<td>'+zsftjyq+'</td>'+
+                            '<td style="display:none">'+sftjyq+'</td>'+
+                            '<td>'+zsfjcyqry+'</td>'+
+                            '<td style="display:none">'+sfjcyqry+'</td>'+
+                            '<td>'+zgw_status+'</td>'+
+                            '<td style="display:none">'+gw_status+'</td>'+
+                            '<td>'+ztraffic_way+'</td>'+
+                            '<td style="display:none">'+traffic_way+'</td>'+
+                            '<td style="display:none">'+sfxqyq+'</td>'+
+                            '<td style="display:none">'+mobile+'</td>'+
+                            '<td style="display:none">'+yjxxdg+'</td>'+
+                            // '<td><a href="" role="button" class="btnSelect" onclick="">查看</a><button type="button" class="btn btn-default btn-danger">删除</button></td>'+
+                            '<td style="max-width: 65px"> <a style="float: left;" href="" role="button"class="btnSelect btn btn-default btn-danger" data-toggle="modal" data-target="#myModal">查看</a><button style="float: left;" type="button" class="btn btn-default btn-danger">删除</button></td>'+
+                            // '<td><button type="button" class="btnSelect btn btn-default btn-danger">查看</button><button type="button" class="btn btn-default btn-danger">删除</button></td>'+
+                            '</tr>'
+                        )
+                    }
+
+                   // alert("共有"+totalNum+"条记录"+totalPage+"页");
+                    initPagination(totalPage,totalNum);
+                }
+            }
+        });
+    }
+
+    //初始化分页栏
+    function initPagination(totalPage,totalNum) {
+        $('#pagination').html(" ");
+        $('#pagination').append(
+            '<ul class="pagination" style="display:inline;">' +
+            '<span style="float: left; max-width: 150px">每页显示' +
+            '<select id="dataNum" class="form-control">' +
+            '<option value="10">10</option>' +
+            '<option value="20">20</option>' +
+            '<option value="30">30</option>' +
+            '</select>条记录,总共有' + totalPage + '页，总共' + totalNum + '条记录</span>' +
+            '</ul>'
+        )
+        $("#pagination ul").append(
+            '<li style="float: right; max-width: 80px"><a href="javascript:void(0);"  id="next">下一页</a>'
+        )
+        // for (var i = 1; i <= totalPage; i++) {
+        for (var i = totalPage; i >= 1; i--) {
+            $("#pagination ul").append(
+                '<li id="page'+i+'" style="float: right; max-width: 80px"><a href="javascript:void(0);"  onclick="getUserList(' + i + ',' + avageNum + ')">' + i + '</a>'
+            )
+        }
+        // οnclick="getUserList('+ (currentPage - 1) + ','+ avageNum + ')"
+        $("#pagination ul").append(
+            '<li style="float: right; max-width: 80px"><a href="javascript:void(0);" id="prev">上一页</a>'
+        )
+
+
+        $("select option[value=" + avageNum + "]").attr('selected', true)
+       $("#page"+currentPage).addClass("active");
+        checkA();
+    }
+
+    //很关键，因为执行initPagination方法时，将select删除再重新添加，所以需要先将select上的结点移除off
+    //然后再绑定结点on，如果不这么做，会出现change事件只被触发一次。
+    $(document).off('change','#dataNum').on('change','#dataNum',function(){
+        avageNum = $(this).children('option:selected').val();
+        currentPage = 1;
+        getUserList(currentPage,avageNum);
+        initPagination(totalPage,totalNum);
+    });
+
+    //设置分页栏点击时候的高亮
+    $("#pagination").on("click","li",function(){
+        var aText = $(this).find('a').html();
+        checkA();
+        if (aText == "上一页"){
+            $(".pagination > li").removeClass("active");
+            $("#page"+currentPage).removeClass("active");
+            $("#page"+(currentPage -1)).addClass("active");
+            getUserList(currentPage - 1,avageNum);
+            checkA();
+        }else if(aText == "下一页"){
+            $(".pagination > li").removeClass("active");
+            $("#page"+currentPage).removeClass("active");
+            $("#page"+(currentPage + 1)).addClass("active");
+            getUserList(currentPage + 1,avageNum);
+            checkA();
+        }else{
+            $(".pagination > li").removeClass("active");
+            $(this).addClass("active");
+        }
+    })
+
+    //因为其他地方都需要用到这两句，所以封装出来
+    //主要是用于检测当前页如果为首页，或者尾页时，上一页和下一页设置为不可选中状态
+    function checkA() {
+        currentPage == 1 ? $("#prev").addClass("btn btn-default disabled") : $("#prev").removeClass("btn btn-default disabled");
+        currentPage == totalPage ? $("#next").addClass("btn btn-default disabled") : $("#next").removeClass("btn btn-default disabled");
+    }
+
+
+
+
+
+
+        //循环每一个表行(tr)
+        // $(".userListTable tbody tr").each(function(){
+        $(".userListTable tbody").on('click','.btnSelect',function(){
+            // var arrData=[];
+            //获得当前行
+            var currentRow=$(this).closest("tr");
+
+
+            // var currentRow=$(this);
+            var addtime=currentRow.find("td:eq(0)").text();
+            var name=currentRow.find("td:eq(1)").text();
+            var sfzh=currentRow.find("td:eq(2)").text();
+            var branchName=currentRow.find("td:eq(3)").text();
+            var branchId=currentRow.find("td:eq(4)").text();
+            var symptom=currentRow.find("td:eq(6)").text();
+            var retTime=currentRow.find("td:eq(7)").text();
+            var monintemp=currentRow.find("td:eq(8)").text();
+            var aftertemp=currentRow.find("td:eq(9)").text();
+            var sftjyq=currentRow.find("td:eq(11)").text();
+            var sfjcyqry=currentRow.find("td:eq(13)").text();
+            var gw_status=currentRow.find("td:eq(15)").text();
+            var traffic_way=currentRow.find("td:eq(17)").text();
+            var sfxqyq=currentRow.find("td:eq(18)").text();
+            var mobile=currentRow.find("td:eq(19)").text();
+            var yjxxdg=currentRow.find("td:eq(20)").text();
+            var obj={};
+            obj.addtime=addtime;
+            obj.name=name;
+            obj.sfzh=sfzh;
+            obj.branchName=branchName;
+            obj.branchId=branchId;
+            obj.symptom=symptom;
+            obj.retTime=retTime;
+            obj.monintemp=monintemp;
+            obj.aftertemp=aftertemp;
+            obj.sftjyq=sftjyq;
+            obj.sfjcyqry=sfjcyqry;
+            obj.traffic_way=traffic_way;
+            obj.sfxqyq=sfxqyq;
+            obj.gw_status=gw_status;
+            obj.mobile=mobile;
+            obj.yjxxdg=yjxxdg;
+          //  alert(JSON.stringify(obj));
+         //   alert("总数："+totalNum+"页数："+totalPage);
+            // arrData.push(obj);
+            // $("#addtime").val(addtime);
+            // $("#name").val(name);
+            // $("#branchName").val(branchName);
+
+            var userRecord = obj;
+            for(var key in userRecord){
+                console.log(key+":"+userRecord[key]);//json对象中属性的名字：对象中属性的值
+                if (userRecord[key]!="" && userRecord[key]!=null){
+                    var s = document.getElementById(key); //获取select对象
+                    if (s!=null && s.type == "select-one"){
+                        var ops = s.options;
+                        for(var i=0;i<ops.length; i++){
+                            var tempValue = ops[i].value;
+                            if(tempValue == userRecord[key])
+                            {
+                                ops[i].selected = true;  //如果后台的值与下拉列表的某一个value相等，就设置此项为选中项
+                                break;
+                            }
+                        }
+                    }
+                    if (s!=null && (s.type == "text" || s.type == "hidden")){ //id="mobile" 特殊
+                        s.value = userRecord[key];  //设置输入框为对应值
+                    }
+
+                }
+            }//获取对象中属性的值的方式：对象.属性名称（属性必须存在）；对象[属性名字]
+
+            // console.log(JSON.stringify(obj));
+
+        });
+
+
+
+
+  
+
+    /*<![CDATA[*/
+    function fgRecord() {
+        $('#healthSh').data('bootstrapValidator').validate();
+        if ( !$('#healthSh').data('bootstrapValidator').isValid()){
+            return false;
+        }
+        var djStartTime = $('#djStartTimes').val();
+        var djEndTime = $('#djEndTimes').val();
+        if (djStartTime!="" && djEndTime!=""){
+            if (djStartTime>djEndTime){
+                alert("上报开始时间不能大于上报结束时间");
+                return false;
+            }
+        }
+        var name = $('#name').val();//登录的人的姓名
+        var sfzh = $('#sfzh').val();
+        var mobile = $('#mobile').val();
+        var branchName = $('#branchName').val();
+        var nameNew = $('#nameNew').val();//查询的人的姓名
+        var djStartTime = $('#djStartTimes').val();
+        var djEndTime = $('#djEndTimes').val();
+        var branchId = $('#branchs').val();//查询人的部门
+        var branchIdLd = $('#branch_id').val();//登录的人部门
+        if (djStartTime!="" && djEndTime!="" ){
+            $("#fglb").addClass("active");
+            $("#fglb1").addClass("active");
+            $("#myTable").addClass("active");
+            $("#pagination").addClass("active");
+            $("#myTable").css("display","block");
+            $("#pagination").css("display","block");
+
+            $("#healthSh").removeClass("active");
+            $("#healthSh").css("display","none");
+            $("#fgcx").removeClass("active");
+            $("#fgcx1").removeClass("active");
+        getUserList(currentPage,avageNum);
+        initPagination(totalNum,totalPage);
+        // var name = $('#nameRe').val();
+        // var sfzh = $('#sfzhRe').val();
+        // var mobile = $('#mobileRe').val();
+        // var branchName = $('#branchNameRe').val();
+        // var branch_id = $('#branch_idRe').val();
+        // location.href = ("list?name="+encodeURI(name)+"&sfzh="+sfzh+"&mobile="+mobile+"&branchName="+encodeURI(branchName)+"&branchId="+branch_id+"&pageNum="+"1"+"&pageSize="+"20"); //请求后端接口url跳转页面,不跳转就改用action
+
+      }else {
+            window.location.href = ("list?name="+encodeURI(name)+"&sfzh="+sfzh+"&mobile="+mobile+"&branchName="+encodeURI(branchName)+"&branchId="+branchIdLd+"&pageNum="+"1"+"&pageSize="+"20"); //请求后端接口url跳转页面,不跳转就改用action
+        }
+    }
+    /*]]>*/
+
+
+    /*<![CDATA[*/
+    function searchRecord() {
+        var name = $('#name').val();
+        var sfzh = $('#sfzh').val();
+        var mobile = $('#mobile').val();
+        var branchName = $('#branchName').val();
+        var branch_id = $('#branch_id').val();
+        location.href = ("search?name="+encodeURI(name)+"&sfzh="+sfzh+"&mobile="+mobile+"&branchName="+encodeURI(branchName)+"&branchId="+branch_id); //请求后端接口url跳转页面,不跳转就改用action
+
+    }
+    /*]]>*/
+
+
+
+    $('#branchs').change(function () {
+        if( ($(this).val() != -1)) {
+            $("#branch_id2").val($(this).val());
+        }
+    });
+
+</script>
+
+</body>
+</html>

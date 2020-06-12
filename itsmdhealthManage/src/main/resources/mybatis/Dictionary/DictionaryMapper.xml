@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smd.employee.mapper.DictionaryMapper">
+
+    <resultMap id="resultMap" type="com.smd.employee.model.vo.dic.DictionaryVo">
+        <id property="id" column="ID" javaType="String"/>
+        <result property="parent_code" column="PARENT_CODE" javaType="String"/>
+        <result property="parent_name" column="PARENT_NAME" javaType="String"/>
+        <result property="children_code" column="CHILDREN_CODE" javaType="String"/>
+        <result property="children_name" column="CHILDREN_NAME" javaType="String"/>
+        <result property="orderNum" column="ORDERNUM" javaType="String"/>
+        <result property="status" column="STATUS" javaType="String"/>
+    </resultMap>
+    
+    <!--查询数据字典-->
+    <select id="queryDictionary" resultMap="resultMap">
+        SELECT * FROM T_SMD_DICTIONART
+        where 1=1
+        and status = '1'
+        <if test="list != null and list.size > 0">
+            and parent_code in
+            <foreach collection="list" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by parent_code,ordernum desc
+    </select>
+
+</mapper>

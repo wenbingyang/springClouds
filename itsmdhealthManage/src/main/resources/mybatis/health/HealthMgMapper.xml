@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smd.employee.mapper.HealthMgMapper">
+
+    <insert id="saveRyRegInfo" parameterType="com.smd.employee.model.User">
+        <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">
+            SELECT REPLACE(UUID(),'-','') FROM dual
+        </selectKey>
+        INSERT INTO T_SMD_USERINFO(
+            id,
+            sfzh,
+            name,
+            branch_id,
+            mobile,
+            mail,
+            user_password,
+            address,
+            role_bz,
+            addtime
+        )
+        VALUES (
+            #{id},
+            #{sfzh},
+            #{name},
+            #{branchs},
+            #{telephone},
+            #{email},
+            #{password},
+            #{address},
+            #{role_bz},
+            #{addtime}
+            )
+    </insert>
+    <update id="updateryTempinfo" parameterType="java.util.Map">
+        update T_SMD_TEMPEINFO
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="aftertemp != null and aftertemp!=''">
+                aftertemp=#{aftertemp},
+            </if>
+            <if test="symptom != null and symptom!=''">
+                symptom=#{symptom},
+            </if>
+            <if test="sympt_res != null and sympt_res!=''">
+                sympt_res=#{sympt_res},
+            </if>
+        </trim>
+        where 1=1
+        <if test="sfzh!=null and sfzh!='' ">
+            AND sfzh=#{sfzh}
+        </if>
+        <if test="addtime!=null and addtime!='' ">
+            AND addtime=#{addtime}
+        </if>
+    </update>
+
+    <update id="updateryRoutenfo" parameterType="java.util.Map">
+        update T_SMD_ROUTEINFO
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="retTime != null and retTime!=''">
+                return_time=#{retTime},
+            </if>
+            <if test="sftjyq != null and sftjyq!=''">
+                sftjyq=#{sftjyq},
+            </if>
+            <if test="distance_instruc != null and distance_instruc!=''">
+                distance_instruc=#{distance_instruc},
+            </if>
+            <if test="sfjcyqry != null and sfjcyqry!=''">
+                sfjcyqry=#{sfjcyqry},
+            </if>
+            <if test="sympt_instruc != null and sympt_instruc!=''">
+                sympt_instruc=#{sympt_instruc},
+            </if>
+            <if test="sfxqyq != null and sfxqyq!=''">
+                sfxqyq=#{sfxqyq},
+            </if>
+            <if test="yjxxdg != null and yjxxdg!=''">
+                yjxxdg=#{yjxxdg},
+            </if>
+            <if test="traffic_way != null and traffic_way!=''">
+                traffic_way=#{traffic_way},
+            </if>
+            <if test="trafficelse_way != null and trafficelse_way!=''">
+                trafficelse_way=#{trafficelse_way},
+            </if>
+            <if test="gw_status != null and gw_status!=''">
+                gw_status=#{gw_status},
+            </if>
+        </trim>
+        where 1=1
+        <if test="sfzh!=null and sfzh!='' ">
+            AND sfzh=#{sfzh}
+        </if>
+        <if test="addtime!=null and addtime!='' ">
+            AND addtime=#{addtime}
+        </if>
+    </update>
+
+    <select id="queryEmployArchives" resultType="java.util.Map">
+        select t.id as "id" ,t.sfzh as "sfzh",
+              t.name as "name",t.mobile as "mobile",t.branch_id as "branchId",
+              d.children_name as "branchName",
+              t.mail as "mail",t.address as "address",
+              t.role_bz as "sfbz" from T_SMD_USERINFO t
+              left join T_SMD_DICTIONART d on t.branch_id=d.children_code
+              where 1=1 and d.parent_code='jsDepartment'
+               and t.mobile = #{telephone} and t.user_password=#{password}
+    </select>
+
+    <select id="getEmployeeInfoByCid" resultType="java.util.Map">
+        select t.id as "id" ,t.role_bz as "role_bz",t.sfzh as "sfzh",
+              t.name as "name",t.mobile as "mobile",
+              d.children_name as "branchName",
+              t.mail as "mail",t.address as "address",
+             t.branch_id as "branch_id" from T_SMD_USERINFO t
+              left join T_SMD_DICTIONART d on t.branch_id=d.children_code
+              where 1=1 and d.parent_code='jsDepartment'
+              <if test="'' != sfzh and null !=sfzh">
+                    and  t.sfzh = #{sfzh}
+              </if>
+              <if test="'' != mobile and null !=mobile">
+                    and  t.mobile = #{mobile}
+              </if>
+
+    </select>
+
+    <select id="queryTempRouteInfoByCidAndaddtime" resultType="java.util.Map">
+        select  u.name as "name",u.sfzh as "sfzh",u.role_bz as "role_bz",
+         u.branch_id as "branchId", u.mobile as "mobile",d.children_name as "branchName",
+         t.addtime as "addtime", t.symptom as "symptom",
+        r.return_time as "retTime",r.sfjcyqry as "sfjcyqry",
+        r.sympt_instruc as "sympt_instruc",r.sftjyq as "sftjyq",
+        r.distance_instruc as "distance_instruc",r.gw_status as "gw_status",
+        r.sfxqyq as "sfxqyq",r.traffic_way as "traffic_way",
+        r.trafficelse_way as "trafficelse_way",
+        t.monintemp as "monintemp", t.aftertemp as "aftertemp",
+        t.sympt_res as "sympt_res",r.yjxxdg as "yjxxdg"
+        from   T_SMD_ROUTEINFO r
+        left  join T_SMD_TEMPEINFO t on r.sfzh = t.sfzh and r.addtime = t.addtime
+        left join T_SMD_USERINFO u on t.sfzh = u.sfzh
+        left join T_SMD_DICTIONART d on u.branch_id=d.children_code
+        where 1=1  and d.parent_code='jsDepartment'
+        <if test="'' != sfzh and null !=sfzh">
+            and  u.sfzh = #{sfzh}
+        </if>
+        <if test="'' != addtime and null !=addtime">
+            and  t.addtime = #{addtime}
+        </if>
+        <if test="'' != addtime and null !=addtime">
+            and  r.addtime = #{addtime}
+        </if>
+        <if test="'' != mobile and null !=mobile">
+            and  u.mobile = #{mobile}
+        </if>
+    </select>
+
+
+
+
+    <select id="queryTempRouteInfoBycid" resultType="java.util.Map">
+        select  r.return_time as "returntime",
+        t.monintemp as "monintemp"
+        from   T_SMD_ROUTEINFO r
+        left  join T_SMD_TEMPEINFO t on r.sfzh = t.sfzh
+        left join T_SMD_USERINFO u on t.sfzh = u.sfzh
+        where 1=1
+        <if test="'' != sfzh and null !=sfzh">
+            and  u.sfzh = #{sfzh}
+        </if>
+        <if test="'' != addtime and null !=addtime">
+            and  t.addtime = #{addtime}
+        </if>
+    </select>
+
+
+    <select id="queryHealthReportByxpage" resultType="java.util.Map">
+        select t.addtime as "addtime", u.name as "name",u.sfzh as "sfzh",
+        u.branch_id as "branchId", u.mobile as "mobile",d.children_name as "branchName",
+        t.symptom as "symptom",
+        ( case when t.symptom = '0' then '是' when t.symptom = '1' then '否' end)zsymptom,
+        t.sympt_res as "sympt_res",
+        r.return_time as "retTime", t.monintemp as "monintemp", t.aftertemp as "aftertemp",
+        r.sftjyq as "sftjyq",
+        ( case when r.sftjyq = '0' then '是' when r.sftjyq = '1' then '否' end)zsftjyq,
+        r.sfjcyqry as "sfjcyqry",
+        ( case when r.sfjcyqry = '0' then '无' when r.sfjcyqry = '1' then '疫情重点地区人员（含湖北、浙江、广东、河南、安徽、湖南六省）'
+        when r.sfjcyqry = '2' then '新冠肺炎疑似病人' when r.sfjcyqry = '3' then '新冠肺炎确诊病人'
+        when r.sfjcyqry = '4' then '其他（需填写说明）'  end)zsfjcyqry,
+        r.sympt_instruc as "sympt_instruc",
+        r.distance_instruc as "distance_instruc",
+        r.gw_status as "gw_status",
+        ( case when r.gw_status = '0' then '线下到岗' when r.gw_status = '1' then '线上到岗'
+        when r.gw_status = '2' then '居家隔离' when r.gw_status = '3' then '正接受医学观察'
+        when r.gw_status = '4' then '已被确诊感染病例'  end)zgw_status,
+        r.sfxqyq as "sfxqyq",
+        ( case when r.sfxqyq = '0' then '是' when r.sfxqyq = '1' then '否' end)zsfxqyq,
+        r.traffic_way as "traffic_way",
+        ( case when r.traffic_way = '0' then '自驾' when r.traffic_way = '1' then '电动车'
+        when r.traffic_way = '2' then '步行' when r.traffic_way = '3' then '公司班车'
+        when r.traffic_way = '4' then '爱心拼车' when r.traffic_way = '5' then '其他'  end)ztraffic_way,
+        r.trafficelse_way as "trafficelse_way",
+        r.yjxxdg as "yjxxdg"
+        from   T_SMD_ROUTEINFO r
+        left  join T_SMD_TEMPEINFO t on r.sfzh = t.sfzh and r.addtime = t.addtime
+        left join T_SMD_USERINFO u on t.sfzh = u.sfzh
+        left join T_SMD_DICTIONART d on u.branch_id=d.children_code
+        where 1=1
+        <if test="'' != sfzh and null !=sfzh and branchId != '35'.toString() and isBz != '1'.toString() and isLd!= '1'.toString()">
+            and  u.sfzh = #{sfzh}
+        </if>
+        <if test="'' != addtime and null !=addtime">
+            and  t.addtime = #{addtime}
+        </if>
+        <if test="'' != addtime and null !=addtime">
+            and  r.addtime = #{addtime}
+        </if>
+        <if test="'' != mobile and null !=mobile  and branchId != '35'.toString() and isBz != '1'.toString() and isLd!= '1'.toString()">
+            and  u.mobile = #{mobile}
+        </if>
+        <if test="'' != name and null !=name">
+            and u.name LIKE  concat(concat('%', #{name}), '%')
+        </if>
+        <if test="'' != branchId and null !=branchId and branchId != '35'.toString()">
+            and  u.branch_id = #{branchId}
+        </if>
+        <if test="'' != gw_status and null !=gw_status">
+            and  r.gw_status = #{gw_status}
+        </if>
+        <if test="'' != djStartTime and null !=djStartTime">
+            and t.addtime  <![CDATA[ >= ]]>#{djStartTime}
+        </if>
+        <if test=" '' != djEndTime and null !=djEndTime">
+            and t.addtime  <![CDATA[ <= ]]>#{djEndTime}
+        </if>
+        order by  u.branch_id desc,t.addtime desc
+    </select>
+
+
+    <insert id="saveryTempinfo" parameterType="java.util.Map">
+        <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">
+            SELECT REPLACE(UUID(),'-','')   FROM dual
+        </selectKey>
+        INSERT  INTO T_SMD_TEMPEINFO(
+        id,
+        sfzh,
+        monintemp,
+        symptom,
+        sympt_res,
+        addtime
+        )
+        VALUES (
+        #{id},
+        #{sfzh},
+        #{monintemp},
+        #{symptom},
+        #{sympt_res},
+        #{addtime}
+        )
+    </insert>
+
+    <insert id="saveryRoutenfo" parameterType="java.util.Map">
+        <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">
+            SELECT REPLACE(UUID(),'-','')   FROM dual
+        </selectKey>
+        INSERT  INTO T_SMD_ROUTEINFO(
+            id,
+            sfzh,
+            return_time,
+            sftjyq,
+            distance_instruc,
+            sfjcyqry,
+            sympt_instruc,
+            sfxqyq,
+            yjxxdg,
+            traffic_way,
+            trafficelse_way,
+            gw_status,
+            addtime
+        )
+        VALUES (
+            #{id},
+            #{sfzh},
+            #{retTime},
+            #{sftjyq},
+            #{distance_instruc},
+            #{sfjcyqry},
+            #{sympt_instruc},
+            #{sfxqyq},
+            #{yjxxdg},
+            #{traffic_way},
+            #{trafficelse_way},
+            #{gw_status},
+            #{addtime}
+        )
+    </insert>
+
+
+
+</mapper>

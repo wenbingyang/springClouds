@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+    <title>登录</title>
+
+    <!-- 新 Bootstrap4 核心 CSS 文件 在编译运行时必须用@{}，否则报错 NOT GET /... -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-guojiao.css}"/>
+    <link rel="stylesheet" th:href="@{/css/animate.css}"/>
+
+    <!--在用google浏览器测试时可以放开-->
+    <!--<link rel="stylesheet" type="text/css" href="css/bootstrap.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="css/bootstrap-guojiao.css"/>-->
+    <!--<link rel="stylesheet" type="text/css" href="css/animate.css"/>-->
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+
+    <!-- popper.min.js 用于弹窗、提示、下拉菜单 -->
+    <script th:src="@{/js/popper.min.js}"></script>
+
+    <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery.singlePageNav.min.js}"></script>
+    <script th:src="@{/js/wow.min.js}"></script>
+    <script th:src="@{/js/bootstrapValidator.min.js}"></script>
+
+</head>
+
+<body>
+
+<!--导航-->
+<nav class="navbar navbar-default">
+    <div class="container">
+        <!--小屏幕导航按钮和logo-->
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#" class="navbar-brand">复工人员监控</a>
+        </div>
+        <!--小屏幕导航按钮和logo-->
+        <!--导航-->
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a th:href="@{toLogin}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;首页</a></li>
+<!--                <li><a th:href="@{list}"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;用户管理</a></li>-->
+            </ul>
+<!--            <ul class="nav navbar-nav navbar-right">-->
+<!--                <li class="dropdown">-->
+<!--                    <a id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                        admin-->
+<!--                        <span class="caret"></span>-->
+<!--                    </a>-->
+<!--                    <ul class="dropdown-menu" aria-labelledby="dLabel">-->
+<!--                        <li><a href="index.html"><span class="glyphicon glyphicon-screenshot"></span>&nbsp;&nbsp;前台首页</a></li>-->
+<!--                        <li><a href="index.html"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;个人主页</a></li>-->
+<!--                        <li><a href="index.html"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;个人设置</a></li>-->
+<!--                        <li><a href="index.html"><span class="glyphicon glyphicon-credit-card"></span>&nbsp;&nbsp;账户中心</a></li>-->
+<!--                        <li><a href="index.html"><span class="glyphicon glyphicon-heart"></span>&nbsp;&nbsp;我的收藏</a></li>-->
+<!--                    </ul>-->
+<!--                </li>-->
+<!--                <li><a href="#bbs"><span class="glyphicon glyphicon-off"></span>&nbsp;&nbsp;退出</a></li>-->
+<!--            </ul>-->
+        </div>
+        <!--导航-->
+
+    </div>
+</nav>
+<!--导航-->
+
+<!--&lt;!&ndash;导航&ndash;&gt;-->
+<!--<nav class="navbar navbar-default navbar-fixed-top">-->
+<!--    &lt;!&ndash;&lt;!&ndash;container-fluid:流媒体视窗百分百宽度&ndash;&gt;&ndash;&gt;-->
+<!--    <div class="container">-->
+<!--        &lt;!&ndash;小屏幕导航按钮和logo&ndash;&gt;-->
+<!--        <div class="navbar-header">-->
+<!--            &lt;!&ndash;.navbar-collapse:点号不能少&ndash;&gt;-->
+<!--            <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">-->
+<!--                <span class="icon-bar"></span>-->
+<!--                <span class="icon-bar"></span>-->
+<!--                <span class="icon-bar"></span>-->
+<!--            </button>-->
+<!--            <a href="#" class="navbar-brand">疫情监控</a>-->
+<!--        </div>-->
+<!--        &lt;!&ndash;小屏幕导航按钮和logo&ndash;&gt;-->
+
+<!--        &lt;!&ndash;导航&ndash;&gt;-->
+<!--        <div class="navbar-collapse collapse">-->
+<!--            <ul class="nav navbar-nav navbar-right">-->
+<!--                &lt;!&ndash;<li><a href="#home">首页</a></li>&ndash;&gt;-->
+<!--                &lt;!&ndash;<li><a href="#bbs">论坛</a></li>&ndash;&gt;-->
+<!--                &lt;!&ndash;<li><a href="#html5">前端开发</a></li>&ndash;&gt;-->
+<!--                &lt;!&ndash;<li><a href="#course">最新课程</a></li>&ndash;&gt;-->
+<!--                <li><a href="#app">首页</a></li>-->
+<!--                <li><a href="#contact">登录</a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--        &lt;!&ndash;&lt;!&ndash;导航&ndash;&gt;&ndash;&gt;-->
+<!--    </div>-->
+<!--</nav>-->
+
+<!--导航-->
+<!--<section id="home">-->
+<!--    <div class=="container">-->
+<!--    </div>-->
+<!--</section>-->
+<!--contact-->
+<section id="contact">
+    <div class=="lvjing">
+        <div class=="container">
+            <div class=="row">
+                <div class="col-md-10">
+                    <!--测试表单提交访问接口-->
+                    <!--<form class="form-horizontal"   th:action="@{/list}"  method="get">-->
+                    <!--测试ajax访问请求-->
+                    <form class="form-horizontal" id="loginform" role="form">
+                        <div class="col-md-8">
+                            <!--<label for="name" class="col-md-2 control-label">用户名</label>-->
+                            <span class="col-md-2"
+                                  style="display:inline-block;width:400px;font-weight:bold;color:black">用户名</span>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="name" id="name" placeholder="请输入手机号"/>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <!--<label for="password" class="col-md-2 control-label" >密码</label>-->
+
+                            <span class="col-md-2"
+                                  style="display:inline-block;width:400px;font-weight:bold;color:black">密码</span>
+                            <div class="col-md-10">
+                                <input type="password" class="form-control" name="password" id="password"
+                                       placeholder="密码"/>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input name="submitlogin" style="width: 58px"  value="登录" class="btn btn-info" onclick="login()"/>
+                                &nbsp; &nbsp; &nbsp;
+                                <input type="reset" value="注册" class="btn btn-info" onclick="register()"/>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script type="text/javascript" th:inline="javascript">
+
+    $(function () {
+        $('#loginform').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                name: {
+                    message: '用户名验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        stringLength:{
+                            min: 11,
+                            max: 11,
+                            message: '手机号长度是11'
+                        },
+                        regexp:{
+                            regexp: /^[0-9]+$/,
+                            message: '手机号只能是数字'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        }
+                    }
+                }
+              }
+            // submitHandler: function (validator, form, submitButton) {
+            //     alert("submit");
+            // }
+        });
+    });
+
+    /*<![CDATA[*/
+    function login() {
+        if ( !$('#loginform').data('bootstrapValidator').isValid()){
+            return false;
+        }
+        //jQuery写法
+        var telephone = $('#name').val();
+        var password = $('#password').val();
+        var ldata = {
+            "telephone": telephone,
+            "password": password
+        };
+
+        var data = JSON.stringify(ldata);//将JSON javascripte对象转化为JSON字符map方便接收
+        $.ajax({
+            type: "POST",
+            dataType: "json",//通过POST方式上传请求
+            contentType: "application/json",//上传内容格式为json结构
+            data: data,                                 //上传的参数
+            async: true,   //必须是true,false无法location.href跳转到其他页面
+            url: "queryEmployArchives",     //请求的url。与后端@Request Mapping注解中的值一致。
+            success: function (mdata) {          //请求成功的回调函数
+                if (mdata.code === 2) {
+                           //alert("成功"+mdata.result.data.empRecord.name);
+//                    window.open("user/userAdd.html", "_blank");
+                    location.href = ("list?name="+encodeURI(mdata.result.data.empRecord.name)+"&sfzh="+mdata.result.data.empRecord.sfzh+"&mobile="+ldata.telephone+"&branchName="+encodeURI(mdata.result.data.empRecord.branchName)+"&branchId="+mdata.result.data.empRecord.branchId+"&pageNum="+"1"+"&pageSize="+"20"); //请求后端接口url跳转页面,不跳转就改用action
+//                    window.location.href = "@{/list}"; //请求后端接口url跳转页面
+//                    var context = /*[[@{/list}]]*/ ;
+//                    alert(context);
+//                    location.href=context;
+                } else if (mdata.code === 0) {
+                    alert(mdata.errorDesc);
+                }
+            },
+            error: function (e) {           //请求失败的回调函数
+                console.log(e);
+            }
+
+        });
+
+    }
+
+    /*]]>*/
+
+    /*<![CDATA[*/
+    function register() {
+        //跳转到注册界面进行注册
+        // location.href = ("toAdd");
+        // window.location.href = "@{/toAdd}"; //请求后端接口url跳转页面
+        var context = /*[[@{/toAdd}]]*/;
+      //  alert(context);
+        window.location.href = context;
+    }
+    /*]]>*/
+
+</script>
+</body>
+</html>

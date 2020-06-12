@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+    <title>添加用户</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-guojiao.css}"/>
+    <link rel="stylesheet" th:href="@{/css/animate.css}"/>
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script th:src="@{/js/jquery.min.js}"></script>
+
+    <script th:src="@{/js/jquery.form.js}"></script>
+    <!-- popper.min.js 用于弹窗、提示、下拉菜单 -->
+    <script th:src="@{/js/popper.min.js}"></script>
+
+    <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery.singlePageNav.min.js}"></script>
+
+    <script th:src="@{/js/wow.min.js}"></script>
+    <script th:src="@{/js/bootstrapValidator.min.js}"></script>
+
+</head>
+<body class="container">
+<br/>
+<h1>添加用户</h1>
+<br/><br/>
+
+<div class="with:80%">
+    <form class="form-horizontal" th:action="@{/regEmploy}" method="post" id="addemploy" onsubmit="return registerReturn()">
+        <div class="form-group">
+            <label for="telephone" class="col-md-2"
+                   style="display:inline-block;width:400px;font-weight:bold;color:black">手机号</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="telephone" id="telephone" placeholder="手机号"/>
+            </div>
+        </div>
+        <div class="form-group">
+<!--            control-panel不加否则css被覆盖-->
+            <label for="password" class="col-md-2"
+                   style="display:inline-block;width:400px;font-weight:bold;color:black">密码</label>
+            <div class="col-md-10">
+                <input type="password" class="form-control" name="password" id="password"
+                       placeholder="密码"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <!--            control-panel不加否则css被覆盖-->
+            <label for="confirm_password" class="col-md-2"
+                   style="display:inline-block;width:400px;font-weight:bold;color:black">确认密码</label>
+            <div class="col-md-10">
+                <input type="password" class="form-control" name="confirm_password" id="confirm_password"
+                       placeholder="确认密码"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sfzh" class="col-md-2"
+                   style="display:inline-block;width:400px;font-weight:bold;color:black">身份证号</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="sfzh" id="sfzh" placeholder="身份证号"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="name" class="col-md-2"
+                   style="display:inline-block;width:400px;font-weight:bold;color:black">姓名</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="name" id="name" placeholder="姓名"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="address" class="col-md-2"
+                   style="display:inline-block;width:400px;font-weight:bold;color:black">现居住地址</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="address" id="address" placeholder="现居住地址"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email" class="col-md-2"
+                   style="display:inline-block;width:400px;font-weight:bold;color:black">邮箱</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="email" id="email" placeholder="邮箱"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="branchs" class="col-md-2"
+                   style="display:inline-block;width:400px;font-weight:bold;color:black">所属部门</label>
+            <div class="col-md-10">
+                <select name="branchs" id="branchs" class="form-control">
+                    <option th:value="-1">请选择部门</option>
+<!--                    <option  th:each="list:${session.jsDepartment}" th:value="${list.children_code}" th:text="${list.children_name }"></option>-->
+                    <option  th:each="list:${jsDepartment}" th:value="${list.children_code}" th:text="${list.children_name }"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" id="role">
+            <label for="role_bz" class="col-md-2"
+                   style="display:inline-block;width:400px;font-weight:bold;color:black">工作角色</label>
+            <div class="col-md-10">
+                <select name="role_bz" id="role_bz" class="form-control">
+                    <option th:value="0">其他</option>
+                    <option th:value="1">部长</option>
+                </select>
+            </div>
+        </div>
+        <!--<div class="form-group">-->
+            <!--<label for="gw_status" class="col-md-2"-->
+                   <!--style="display:inline-block;width:400px;font-weight:bold;color:black">岗位状态</label>-->
+            <!--<div class="col-md-10">-->
+                <!--<select name="gw_status" id="gw_status" class="form-control">-->
+                    <!--<option th:value="0">线下到岗</option>-->
+                    <!--<option th:value="1">线上到岗</option>-->
+                    <!--<option th:value="2">居家隔离</option>-->
+                    <!--<option th:value="3">正接受医学观察</option>-->
+                    <!--<option th:value="4">已被确诊感染病例</option>-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="form-group">
+<!--            <div class="col-md-offset-2 col-md-10">
+name 为submitlogin防止变灰无法使用-->
+            <div class="col-md-10">
+                <input type="submit" name="submitRegister" value="提交" class="btn btn-info"/>
+                <input type="button" name="relogin" value="返回" class="btn btn-info" onclick="reLogin()"/>
+<!--                <input type="button" value="关闭" class="btn btn-info"/>-->
+<!--                <input type="reset" value="重置" class="btn btn-info"/>-->
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#addemploy').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                telephone: {
+                    message: '手机号验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '手机号不能为空'
+                        },
+                        stringLength:{
+                            min: 11,
+                            max: 11,
+                            message: '手机号长度是11'
+                        },
+                        regexp: {
+                            regexp: /^[0-9]+$/,
+                            message: '手机号只能是数字'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        identical: {
+                            field: 'confirm_password',
+                            message: '密码与确认密码不一致！'
+                        }
+                    }
+                },
+                confirm_password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        identical: {
+                            field: 'password',
+                            message: '确认密码与密码不一致！'
+                        }
+                    }
+
+                },
+                sfzh: {
+                    validators: {
+                        notEmpty: {
+                            message: '身份证号不能为空'
+                        },
+                        regexp: {
+                            regexp: /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/,
+                            message: '身份证号码格式不正确，为15位和18位身份证号码！'
+                        }
+                    }
+                },
+                name : {
+                    validators: {
+                        notEmpty: {
+                            message: '姓名值不能为空！'
+                        },
+                        stringLength: {
+                            min: 2,
+                            message: '姓名长度必须大于2！'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z\u4e00-\u9fa5]+$/,
+                            message: '姓名不能有数字和字符！'
+                        }
+
+
+                    }
+                 },
+                address: {
+                    validators: {
+                        notEmpty: {
+                            message: '现居住地址不能为空'
+                        }
+                    }
+
+                },
+                email: {
+                    validators: {
+                        emailAddress: {
+                            message: '不是有效邮箱地址'
+                        }
+                    }
+                },
+                branchs: {
+                    validators: {
+                        greaterThan: {
+                            value: 0,
+                            message : '请选择部门'
+                        }
+                    }
+                }
+            }
+        });
+
+
+        $('#branchs').change(function () {
+            if($(this).val() == 35  || ($(this).val() == -1)) {
+                $("#role").css("display","none");
+            } else  {
+                $("#role").css("display","block");
+            }
+        });
+
+
+
+
+    });
+
+    /*<![CDATA[*/
+    function reLogin() {
+        window.location.href = "toLogin";
+
+    }
+
+    /*]]>*/
+    /*<![CDATA[*/
+    function registerReturn() {
+        $('#addemploy').ajaxForm(function (message) {
+            if (message.error === true) {
+                alert("注册失败！"+message.errorDesc);
+                window.location.reload();
+            } else if (message.error === false){
+                alert("注册成功！");
+                // window.location.reload();
+                location.href = ("toLogin");
+                //跳转到登录界面
+            }
+        });
+
+    }
+
+    /*]]>*/
+
+
+</script>
+
+</body>
+</html>
